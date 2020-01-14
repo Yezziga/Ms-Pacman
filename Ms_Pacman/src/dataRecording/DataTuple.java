@@ -109,33 +109,57 @@ public class DataTuple {
 
 	public DataTuple(String data) {
 		String[] dataSplit = data.split(";");
-
+		
 		this.DirectionChosen = MOVE.valueOf(dataSplit[0]);
 
-		this.mazeIndex = Integer.parseInt(dataSplit[1]);
-		this.currentLevel = Integer.parseInt(dataSplit[2]);
-		this.pacmanPosition = Integer.parseInt(dataSplit[3]);
-		this.pacmanLivesLeft = Integer.parseInt(dataSplit[4]);
-		this.currentScore = Integer.parseInt(dataSplit[5]);
-		this.totalGameTime = Integer.parseInt(dataSplit[6]);
-		this.currentLevelTime = Integer.parseInt(dataSplit[7]);
-		this.numOfPillsLeft = Integer.parseInt(dataSplit[8]);
-		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[9]);
-		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[10]);
-		this.isInkyEdible = Boolean.parseBoolean(dataSplit[11]);
-		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[12]);
-		this.isSueEdible = Boolean.parseBoolean(dataSplit[13]);
-		this.blinkyDist = Integer.parseInt(dataSplit[14]);
-		this.inkyDist = Integer.parseInt(dataSplit[15]);
-		this.pinkyDist = Integer.parseInt(dataSplit[16]);
-		this.sueDist = Integer.parseInt(dataSplit[17]);
-		this.blinkyDir = MOVE.valueOf(dataSplit[18]);
-		this.inkyDir = MOVE.valueOf(dataSplit[19]);
-		this.pinkyDir = MOVE.valueOf(dataSplit[20]);
-		this.sueDir = MOVE.valueOf(dataSplit[21]);
-		this.numberOfNodesInLevel = Integer.parseInt(dataSplit[22]);
-		this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[23]);
-		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[24]);
+		this.mazeIndex = Integer.parseInt(dataSplit[1]); 
+		this.pacmanPosition = Integer.parseInt(dataSplit[2]);
+		this.pacmanLivesLeft = Integer.parseInt(dataSplit[3]); 
+		this.numOfPillsLeft = Integer.parseInt(dataSplit[4]);
+		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[5]);
+		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[6]);
+		this.isInkyEdible = Boolean.parseBoolean(dataSplit[7]);
+		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[8]);
+		this.isSueEdible = Boolean.parseBoolean(dataSplit[9]);
+		this.blinkyDist = Integer.parseInt(dataSplit[10]);
+		this.inkyDist = Integer.parseInt(dataSplit[11]);
+		this.pinkyDist = Integer.parseInt(dataSplit[12]);
+		this.sueDist = Integer.parseInt(dataSplit[13]);
+		this.blinkyDir = MOVE.valueOf(dataSplit[14]);
+		this.inkyDir = MOVE.valueOf(dataSplit[15]);
+		this.pinkyDir = MOVE.valueOf(dataSplit[16]);
+		this.sueDir = MOVE.valueOf(dataSplit[17]);
+		this.numberOfNodesInLevel = Integer.parseInt(dataSplit[18]);
+		this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[19]);
+		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[20]);
+		
+
+//		this.DirectionChosen = MOVE.valueOf(dataSplit[0]);
+//
+//		this.mazeIndex = Integer.parseInt(dataSplit[1]); 
+//		this.currentLevel = Integer.parseInt(dataSplit[2]); // remove
+//		this.pacmanPosition = Integer.parseInt(dataSplit[3]);
+//		this.pacmanLivesLeft = Integer.parseInt(dataSplit[4]); 
+//		this.currentScore = Integer.parseInt(dataSplit[5]); // remove
+//		this.totalGameTime = Integer.parseInt(dataSplit[6]); // remove
+//		this.currentLevelTime = Integer.parseInt(dataSplit[7]); // remove
+//		this.numOfPillsLeft = Integer.parseInt(dataSplit[8]);
+//		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[9]);
+//		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[10]);
+//		this.isInkyEdible = Boolean.parseBoolean(dataSplit[11]);
+//		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[12]);
+//		this.isSueEdible = Boolean.parseBoolean(dataSplit[13]);
+//		this.blinkyDist = Integer.parseInt(dataSplit[14]);
+//		this.inkyDist = Integer.parseInt(dataSplit[15]);
+//		this.pinkyDist = Integer.parseInt(dataSplit[16]);
+//		this.sueDist = Integer.parseInt(dataSplit[17]);
+//		this.blinkyDir = MOVE.valueOf(dataSplit[18]);
+//		this.inkyDir = MOVE.valueOf(dataSplit[19]);
+//		this.pinkyDir = MOVE.valueOf(dataSplit[20]);
+//		this.sueDir = MOVE.valueOf(dataSplit[21]);
+//		this.numberOfNodesInLevel = Integer.parseInt(dataSplit[22]);
+//		this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[23]);
+//		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[24]);
 	}
 
 	public String getSaveString() {
@@ -143,12 +167,12 @@ public class DataTuple {
 
 		stringbuilder.append(this.DirectionChosen + ";");
 		stringbuilder.append(this.mazeIndex + ";");
-		stringbuilder.append(this.currentLevel + ";");
+//		stringbuilder.append(this.currentLevel + ";");
 		stringbuilder.append(this.pacmanPosition + ";");
 		stringbuilder.append(this.pacmanLivesLeft + ";");
-		stringbuilder.append(this.currentScore + ";");
-		stringbuilder.append(this.totalGameTime + ";");
-		stringbuilder.append(this.currentLevelTime + ";");
+//		stringbuilder.append(this.currentScore + ";");
+//		stringbuilder.append(this.totalGameTime + ";");
+//		stringbuilder.append(this.currentLevelTime + ";");
 		stringbuilder.append(this.numOfPillsLeft + ";");
 		stringbuilder.append(this.numOfPowerPillsLeft + ";");
 		stringbuilder.append(this.isBlinkyEdible + ";");
