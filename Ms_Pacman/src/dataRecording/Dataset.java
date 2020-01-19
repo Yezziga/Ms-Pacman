@@ -1,14 +1,21 @@
 package dataRecording;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // TODO
 public class Dataset {
-	public DataTuple[] dataset;
+	private DataTuple[] dataset;
 	
 	
 	public Dataset(DataTuple[] dataTuples) {
 		dataset = dataTuples;
+
 	}
+	
+	public DataTuple[] getTuples() {
+		return dataset;
+	}
+	
 
 }

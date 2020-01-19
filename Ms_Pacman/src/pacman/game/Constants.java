@@ -46,7 +46,7 @@ public final class Constants
 	};
 	
 	/**
-	 * TODO
+	 * Enumeration for Ms. Pacman AI. These are the different strategies(label in decision tree) the AI can decide to follow.
 	 * @author Jessica
 	 *
 	 */
