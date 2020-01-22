@@ -6,7 +6,7 @@ import java.util.TreeMap;
 public class Node {
 	private String label;
 	private TreeMap<String, Node> nodeChildren;
-	private ArrayList<String> attributeValues;
+	private ArrayList<String> attributeValues; // behöcs ej?
 	private boolean isLeaf;
 
 	public Node(String attributeLabel) {
