@@ -8,6 +8,7 @@ import pacman.game.Constants;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
+import pacman.game.Constants.STRATEGY;
 import pacman.game.Game;
 
 public class DataTuple {
@@ -34,10 +35,12 @@ public class DataTuple {
 	//
 
 	public Constants.STRATEGY strategy;
-	public int closestGhostDist;
-	public int closestEdibleGhostDist;
-	public int closestPillDist;
-	public int closestPowerPillDist;
+	public int closestGhostDist = -1;
+	public int closestEdibleGhostDist = -1;
+	public int closestPillDist = -1;
+	public int closestPowerPillDist = -1;
+	public MOVE closestGhostDir;
+	public MOVE closestEdibleGhostDir;
 
 	public HashMap<String, String> map; // <attribute, attributeValue>
 
@@ -137,28 +140,36 @@ public class DataTuple {
 		// set the closest edible ghost
 		if (closestGhostDist == blinkyDist && isBlinkyEdible) {
 			closestEdibleGhostDist = blinkyDist;
+			closestEdibleGhostDir = blinkyDir;
 		} else if (closestGhostDist == inkyDist && isInkyEdible) {
 			closestEdibleGhostDist = inkyDist;
+			closestEdibleGhostDir = inkyDir;			
 		} else if (closestGhostDist == pinkyDist && isPinkyEdible) {
 			closestEdibleGhostDist = pinkyDist;
+			closestEdibleGhostDir = pinkyDir;
 		} else if (closestGhostDist == sueDist && isSueEdible) {
 			closestEdibleGhostDist = sueDist;
+			closestEdibleGhostDir = sueDir;
 		}
 
 		// set the closest non-edible ghost
 		if (closestGhostDist == blinkyDist && !isBlinkyEdible) {
 			this.closestGhostDist = blinkyDist;
+			closestGhostDir = blinkyDir;
 		} else if (closestGhostDist == inkyDist && !isInkyEdible) {
 			this.closestGhostDist = inkyDist;
+			closestGhostDir = inkyDir;
 		} else if (closestGhostDist == pinkyDist && !isPinkyEdible) {
 			this.closestGhostDist = pinkyDist;
+			closestGhostDir = pinkyDir;
 		} else if (closestGhostDist == sueDist && !isSueEdible) {
 			this.closestGhostDist = sueDist;
+			closestGhostDir = sueDir;
 		}
-
-		closestPowerPillDist = Arrays.stream(game.getPowerPillIndices()).min().getAsInt(); // ignore nommed p-pills?
-		closestPillDist = Arrays.stream(game.getPillIndices()).min().getAsInt(); // ignore nommed pills?;
-	}
+		
+		closestPowerPillDist = getClosestPowerPillDist(game);
+		closestPillDist = getClosestPillDist(game);
+	}	
 
 	public DataTuple(String data) {
 		String[] dataSplit = data.split(";");
@@ -170,14 +181,12 @@ public class DataTuple {
 		this.pacmanPosition = Integer.parseInt(dataSplit[2]);
 		this.numOfPillsLeft = Integer.parseInt(dataSplit[3]);
 		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[4]);
-		this.blinkyDir = MOVE.valueOf(dataSplit[5]);
-		this.inkyDir = MOVE.valueOf(dataSplit[6]);
-		this.pinkyDir = MOVE.valueOf(dataSplit[7]);
-		this.sueDir = MOVE.valueOf(dataSplit[8]);
-		closestPowerPillDist = Integer.parseInt(dataSplit[9]);
-		closestPillDist = Integer.parseInt(dataSplit[10]);
-		closestGhostDist = Integer.parseInt(dataSplit[11]);
-		closestEdibleGhostDist = Integer.parseInt(dataSplit[12]);
+		closestGhostDir = MOVE.valueOf(dataSplit[5]);
+		closestEdibleGhostDir = MOVE.valueOf(dataSplit[6]);
+		closestPowerPillDist = Integer.parseInt(dataSplit[7]);
+		closestPillDist = Integer.parseInt(dataSplit[8]);
+		closestGhostDist = Integer.parseInt(dataSplit[9]);
+		closestEdibleGhostDist = Integer.parseInt(dataSplit[10]);
 
 		// this.DirectionChosen = MOVE.valueOf(dataSplit[0]);
 		//
@@ -230,17 +239,45 @@ public class DataTuple {
 		// stringbuilder.append(this.inkyDist + ";");
 		// stringbuilder.append(this.pinkyDist + ";");
 		// stringbuilder.append(this.sueDist + ";");
-		stringbuilder.append(this.blinkyDir + ";");
-		stringbuilder.append(this.inkyDir + ";");
-		stringbuilder.append(this.pinkyDir + ";");
-		stringbuilder.append(this.sueDir + ";");
+//		stringbuilder.append(this.blinkyDir + ";");
+//		stringbuilder.append(this.inkyDir + ";");
+//		stringbuilder.append(this.pinkyDir + ";");
+//		stringbuilder.append(this.sueDir + ";");
 		// stringbuilder.append(this.numberOfNodesInLevel + ";");
 		// stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
 		// stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
+		stringbuilder.append(closestGhostDir + ";");
+		stringbuilder.append(closestEdibleGhostDir + ";");
 		stringbuilder.append(closestGhostDist + ";");
 		stringbuilder.append(closestEdibleGhostDist + ";");
 
 		return stringbuilder.toString();
+	}
+	
+	private int getClosestPowerPillDist(Game game) {
+		int[] indexArr = game.getActivePowerPillsIndices();
+		if (indexArr.length == 0) {
+			return -1;
+		}
+		int[] temp = new int[indexArr.length];
+
+		for (int i = 0; i < indexArr.length; i++) {
+			temp[i] = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), indexArr[i]);
+		}
+		return Arrays.stream(temp).min().getAsInt();
+	}
+
+	private int getClosestPillDist(Game game) {
+		int[] indexArr = game.getActivePillsIndices();
+		if (indexArr.length == 0) {
+			return -1;
+		}
+		int[] temp = new int[indexArr.length];
+
+		for (int i = 0; i < indexArr.length; i++) {
+			temp[i] = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), indexArr[i]);
+		}
+		return Arrays.stream(temp).min().getAsInt();
 	}
 
 	/**
@@ -339,7 +376,9 @@ public class DataTuple {
 
 	/**
 	 * Discretize the given attribute value and returns it as a string.
-	 * @param attrValue the attribute value to discretize
+	 * 
+	 * @param attrValue
+	 *            the attribute value to discretize
 	 * @return a string of the discretized attribute value or null as default.
 	 */
 	public String discretizeAttrValue(String attrValue) {
@@ -354,11 +393,11 @@ public class DataTuple {
 			return discretizeDistance(closestPowerPillDist).toString();
 		case "closestPillDist":
 			return discretizeDistance(closestPillDist).toString();
-		case "numOfPillsLeft" : 
+		case "numOfPillsLeft":
 			return discretizeNumberOfPills(numOfPillsLeft).toString();
-		case "numOfPowerPillsLeft" : 
+		case "numOfPowerPillsLeft":
 			return discretizeNumberOfPowerPills(numOfPowerPillsLeft).toString();
-			
+
 		default:
 			return null;
 		}
@@ -366,7 +405,9 @@ public class DataTuple {
 	}
 
 	/**
-	 * Creates a hashmap and fills it if it does not exist, else returns the hashmap.
+	 * Creates a hashmap and fills it if it does not exist, else returns the
+	 * hashmap.
+	 * 
 	 * @return the hashmap
 	 */
 	public HashMap<String, String> getHashMap() {
@@ -374,7 +415,7 @@ public class DataTuple {
 			map = new HashMap<>();
 			// make sure attribute names are correct
 			String[] strArr = { "strategy", "closestGhostDist", "closestEdibleGhostDist", "closestPowerPillDist",
-					"closestPillDist", "inkyDir", "pinkyDir", "blinkyDir", "sueDir", "directionChosen",
+					"closestPillDist", "closestEdibleGhostDir", "closestGhostDir", "directionChosen",
 					"pacmanPosition", "numOfPillsLeft", "numOfPowerPillsLeft" };
 
 			for (String str : strArr) {

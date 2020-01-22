@@ -37,7 +37,7 @@ import static pacman.game.Constants.*;
 public final class Game
 {
 	// Strategy for Ms pacman AI.
-	public STRATEGY strategy;
+	public STRATEGY strategy = STRATEGY.EATPILLS;
 	
 	//pills stored as bitsets for efficient copying
 	private BitSet pills, powerPills;

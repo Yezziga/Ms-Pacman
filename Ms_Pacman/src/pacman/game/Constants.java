@@ -53,7 +53,8 @@ public final class Constants
 	public enum STRATEGY {
 		CHASE,
 		FLEE,
-		EATPILLS
+		EATPILLS,
+		EATPOWERPILLS
 	}
 	
 	/**
