@@ -1,8 +1,6 @@
 package dataRecording;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 import pacman.game.Constants;
 import pacman.game.Constants.DM;
@@ -87,6 +85,7 @@ public class DataTuple {
 		}
 
 		strategy = game.strategy;
+		directionChosen = move;
 
 		this.mazeIndex = game.getMazeIndex();
 		this.currentLevel = game.getCurrentLevel();
@@ -136,40 +135,14 @@ public class DataTuple {
 		this.numberOfTotalPowerPillsInLevel = game.getNumberOfPowerPills();
 
 		int closestGhostDist = Collections.min(Arrays.asList(blinkyDist, inkyDist, pinkyDist, sueDist));
+		int[] ghostsDist = new int[] { blinkyDist, inkyDist, pinkyDist, sueDist };
+		Arrays.sort(ghostsDist, 0, ghostsDist.length);
+		setClosestEdibleGhostInfo(ghostsDist);
+		setClosestGhostInfo(ghostsDist);
 
-		// set the closest edible ghost
-		if (closestGhostDist == blinkyDist && isBlinkyEdible) {
-			closestEdibleGhostDist = blinkyDist;
-			closestEdibleGhostDir = blinkyDir;
-		} else if (closestGhostDist == inkyDist && isInkyEdible) {
-			closestEdibleGhostDist = inkyDist;
-			closestEdibleGhostDir = inkyDir;			
-		} else if (closestGhostDist == pinkyDist && isPinkyEdible) {
-			closestEdibleGhostDist = pinkyDist;
-			closestEdibleGhostDir = pinkyDir;
-		} else if (closestGhostDist == sueDist && isSueEdible) {
-			closestEdibleGhostDist = sueDist;
-			closestEdibleGhostDir = sueDir;
-		}
-
-		// set the closest non-edible ghost
-		if (closestGhostDist == blinkyDist && !isBlinkyEdible) {
-			this.closestGhostDist = blinkyDist;
-			closestGhostDir = blinkyDir;
-		} else if (closestGhostDist == inkyDist && !isInkyEdible) {
-			this.closestGhostDist = inkyDist;
-			closestGhostDir = inkyDir;
-		} else if (closestGhostDist == pinkyDist && !isPinkyEdible) {
-			this.closestGhostDist = pinkyDist;
-			closestGhostDir = pinkyDir;
-		} else if (closestGhostDist == sueDist && !isSueEdible) {
-			this.closestGhostDist = sueDist;
-			closestGhostDir = sueDir;
-		}
-		
-		closestPowerPillDist = getClosestPowerPillDist(game);
-		closestPillDist = getClosestPillDist(game);
-	}	
+		closestPowerPillDist = getClosestPillOrPowerPillDist(game, 1);
+		closestPillDist = getClosestPillOrPowerPillDist(game, 0);
+	}
 
 	public DataTuple(String data) {
 		String[] dataSplit = data.split(";");
@@ -188,64 +161,16 @@ public class DataTuple {
 		closestGhostDist = Integer.parseInt(dataSplit[9]);
 		closestEdibleGhostDist = Integer.parseInt(dataSplit[10]);
 
-		// this.DirectionChosen = MOVE.valueOf(dataSplit[0]);
-		//
-		// this.mazeIndex = Integer.parseInt(dataSplit[1]);
-		// this.currentLevel = Integer.parseInt(dataSplit[2]); // remove
-		// this.pacmanPosition = Integer.parseInt(dataSplit[3]);
-		// this.pacmanLivesLeft = Integer.parseInt(dataSplit[4]);
-		// this.currentScore = Integer.parseInt(dataSplit[5]); // remove
-		// this.totalGameTime = Integer.parseInt(dataSplit[6]); // remove
-		// this.currentLevelTime = Integer.parseInt(dataSplit[7]); // remove
-		// this.numOfPillsLeft = Integer.parseInt(dataSplit[8]);
-		// this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[9]);
-		// this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[10]);
-		// this.isInkyEdible = Boolean.parseBoolean(dataSplit[11]);
-		// this.isPinkyEdible = Boolean.parseBoolean(dataSplit[12]);
-		// this.isSueEdible = Boolean.parseBoolean(dataSplit[13]);
-		// this.blinkyDist = Integer.parseInt(dataSplit[14]);
-		// this.inkyDist = Integer.parseInt(dataSplit[15]);
-		// this.pinkyDist = Integer.parseInt(dataSplit[16]);
-		// this.sueDist = Integer.parseInt(dataSplit[17]);
-		// this.blinkyDir = MOVE.valueOf(dataSplit[18]);
-		// this.inkyDir = MOVE.valueOf(dataSplit[19]);
-		// this.pinkyDir = MOVE.valueOf(dataSplit[20]);
-		// this.sueDir = MOVE.valueOf(dataSplit[21]);
-		// this.numberOfNodesInLevel = Integer.parseInt(dataSplit[22]);
-		// this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[23]);
-		// this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[24]);
 	}
 
 	public String getSaveString() {
 		StringBuilder stringbuilder = new StringBuilder();
 
 		stringbuilder.append(strategy + ";");
-
 		stringbuilder.append(this.directionChosen + ";");
-		// stringbuilder.append(this.mazeIndex + ";");
-		// stringbuilder.append(this.currentLevel + ";");
 		stringbuilder.append(this.pacmanPosition + ";");
-		// stringbuilder.append(this.pacmanLivesLeft + ";");
-		// stringbuilder.append(this.currentScore + ";");
-		// stringbuilder.append(this.totalGameTime + ";");
-		// stringbuilder.append(this.currentLevelTime + ";");
 		stringbuilder.append(this.numOfPillsLeft + ";");
 		stringbuilder.append(this.numOfPowerPillsLeft + ";");
-		// stringbuilder.append(this.isBlinkyEdible + ";");
-		// stringbuilder.append(this.isInkyEdible + ";");
-		// stringbuilder.append(this.isPinkyEdible + ";");
-		// stringbuilder.append(this.isSueEdible + ";");
-		// stringbuilder.append(this.blinkyDist + ";");
-		// stringbuilder.append(this.inkyDist + ";");
-		// stringbuilder.append(this.pinkyDist + ";");
-		// stringbuilder.append(this.sueDist + ";");
-//		stringbuilder.append(this.blinkyDir + ";");
-//		stringbuilder.append(this.inkyDir + ";");
-//		stringbuilder.append(this.pinkyDir + ";");
-//		stringbuilder.append(this.sueDir + ";");
-		// stringbuilder.append(this.numberOfNodesInLevel + ";");
-		// stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
-		// stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
 		stringbuilder.append(closestGhostDir + ";");
 		stringbuilder.append(closestEdibleGhostDir + ";");
 		stringbuilder.append(closestGhostDist + ";");
@@ -253,9 +178,14 @@ public class DataTuple {
 
 		return stringbuilder.toString();
 	}
-	
-	private int getClosestPowerPillDist(Game game) {
-		int[] indexArr = game.getActivePowerPillsIndices();
+
+	private int getClosestPillOrPowerPillDist(Game game, int pillType) {
+		int[] indexArr;
+		if (pillType == 0) { // normal pill
+			indexArr = game.getActivePillsIndices();
+		} else { // power pill
+			indexArr = game.getActivePowerPillsIndices();
+		}
 		if (indexArr.length == 0) {
 			return -1;
 		}
@@ -267,17 +197,53 @@ public class DataTuple {
 		return Arrays.stream(temp).min().getAsInt();
 	}
 
-	private int getClosestPillDist(Game game) {
-		int[] indexArr = game.getActivePillsIndices();
-		if (indexArr.length == 0) {
-			return -1;
-		}
-		int[] temp = new int[indexArr.length];
+	private void setClosestEdibleGhostInfo(int[] ghostsDist) {
+		int closestGhostDist = 0;
+		// {2, 5, 10, 55}
+		for (int i = 0; i < ghostsDist.length; i++) {
+			closestGhostDist = ghostsDist[i];
 
-		for (int i = 0; i < indexArr.length; i++) {
-			temp[i] = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), indexArr[i]);
+			if (closestGhostDist == blinkyDist && isBlinkyEdible) {
+				closestEdibleGhostDist = blinkyDist;
+				closestEdibleGhostDir = blinkyDir;
+				break;
+			} else if (closestGhostDist == inkyDist && isInkyEdible) {
+				closestEdibleGhostDist = inkyDist;
+				closestEdibleGhostDir = inkyDir;
+				break;
+			} else if (closestGhostDist == pinkyDist && isPinkyEdible) {
+				closestEdibleGhostDist = pinkyDist;
+				closestEdibleGhostDir = pinkyDir;
+				break;
+			} else if (closestGhostDist == sueDist && isSueEdible) {
+				closestEdibleGhostDist = sueDist;
+				closestEdibleGhostDir = sueDir;
+				break;
+			}
 		}
-		return Arrays.stream(temp).min().getAsInt();
+	}
+
+	private void setClosestGhostInfo(int[] ghostsDist) {
+		// set the closest non-edible ghost
+		int closestGhostDist = 0;
+		// {2, 5, 10, 55}
+		for (int i = 0; i < ghostsDist.length; i++) {
+			closestGhostDist = ghostsDist[i];
+
+			if (closestGhostDist == blinkyDist && !isBlinkyEdible) {
+				this.closestGhostDist = blinkyDist;
+				closestGhostDir = blinkyDir;
+			} else if (closestGhostDist == inkyDist && !isInkyEdible) {
+				this.closestGhostDist = inkyDist;
+				closestGhostDir = inkyDir;
+			} else if (closestGhostDist == pinkyDist && !isPinkyEdible) {
+				this.closestGhostDist = pinkyDist;
+				closestGhostDir = pinkyDir;
+			} else if (closestGhostDist == sueDist && !isSueEdible) {
+				this.closestGhostDist = sueDist;
+				closestGhostDir = sueDir;
+			}
+		}
 	}
 
 	/**
@@ -415,8 +381,8 @@ public class DataTuple {
 			map = new HashMap<>();
 			// make sure attribute names are correct
 			String[] strArr = { "strategy", "closestGhostDist", "closestEdibleGhostDist", "closestPowerPillDist",
-					"closestPillDist", "closestEdibleGhostDir", "closestGhostDir", "directionChosen",
-					"pacmanPosition", "numOfPillsLeft", "numOfPowerPillsLeft" };
+					"closestPillDist", "closestEdibleGhostDir", "closestGhostDir", "directionChosen", "pacmanPosition",
+					"numOfPillsLeft", "numOfPowerPillsLeft" };
 
 			for (String str : strArr) {
 				map.put(str, discretizeAttrValue(str));
