@@ -8,11 +8,7 @@ import dataRecording.Dataset;
 
 public class ID3 {
 	
-	public ID3(Dataset dataset, ArrayList<String> listOfAttributes, String label, Node node) {
-
-	}
-	
-	public String attributeSelection(Dataset dataset, List<String> attributeList) {
+	public String ChoiceOfAttributes(Dataset dataset, List<String> attributeList) {
 		String res = null;
 		float infoD = calculateEntropy(dataset, "strategy");
 		
