@@ -1,6 +1,8 @@
 package pacman.game;
 
+import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Random;
 import java.util.Map.Entry;
@@ -1668,4 +1670,6 @@ public final class Game
 
 		return caches[mazeIndex].getPathDistanceFromA2B(fromNodeIndex,toNodeIndex,lastMoveMade);
 	}
+
+	
 }
