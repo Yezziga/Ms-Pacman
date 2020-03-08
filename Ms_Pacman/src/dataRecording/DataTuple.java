@@ -178,6 +178,7 @@ public class DataTuple {
 
 	private int getClosestPillOrPowerPillDist(Game game, int pillType) {
 		int[] indexArr;
+		boolean stillAvailable = false;
 		if (pillType == 0) { // normal pill
 			indexArr = game.getActivePillsIndices();
 		} else { // power pill
@@ -189,6 +190,7 @@ public class DataTuple {
 		int[] temp = new int[indexArr.length];
 
 		for (int i = 0; i < indexArr.length; i++) {
+			
 			temp[i] = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), indexArr[i]);
 		}
 		return Arrays.stream(temp).min().getAsInt();
