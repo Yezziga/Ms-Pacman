@@ -11,6 +11,7 @@ import java.util.EnumMap;
 import java.util.Random;
 
 import dataRecording.DataCollectorController;
+import decisionTree.DecisionTree;
 import pacman.controllers.Controller;
 import pacman.controllers.HumanController;
 import pacman.controllers.KeyBoardInput;
@@ -84,8 +85,12 @@ public class Executor
 		//exec.replayGame(fileName,visual);
 		 */
 		
+//		DecisionTree tree = new DecisionTree();
+//		tree.buildDecisionTree();
+//		exec.runGameTimed(tree, new StarterGhosts(), visual);
+		
 		//run game for data collection
-		exec.runGameTimed(new DataCollectorController(new KeyBoardInput()),new StarterGhosts(),visual);
+//		exec.runGameTimed(new DataCollectorController(new KeyBoardInput()),new StarterGhosts(),visual);
 	}
 	
     /**

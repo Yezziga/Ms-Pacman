@@ -31,8 +31,6 @@ public class DataTuple {
 	// ====================
 	// ADDED BY JQ
 	//
-	public int closestPillDist = -1;
-	public int closestPowerPillDist = -1;
 	public Constants.STRATEGY strategy;
 
 	public HashMap<String, String> map; // <attribute, attributeValue>
@@ -91,9 +89,6 @@ public class DataTuple {
 		this.currentLevelTime = game.getCurrentLevelTime();
 		this.numOfPillsLeft = game.getNumberOfActivePills();
 		this.numOfPowerPillsLeft = game.getNumberOfActivePowerPills();
-		
-		this.closestPillDist = getClosestPillOrPowerPillDist(game, 0);
-		this.closestPowerPillDist = getClosestPillOrPowerPillDist(game, 1);
 
 		if (game.getGhostLairTime(GHOST.BLINKY) == 0) {
 			this.isBlinkyEdible = game.isGhostEdible(GHOST.BLINKY);
@@ -139,19 +134,16 @@ public class DataTuple {
 		String[] dataSplit = data.split(";");
 
 		strategy = Constants.STRATEGY.valueOf(dataSplit[0]);
-
-		this.closestPillDist =Integer.parseInt(dataSplit[1]);
-		this.closestPowerPillDist =Integer.parseInt(dataSplit[2]);
-		this.numOfPillsLeft = Integer.parseInt(dataSplit[3]);
-		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[4]);
-		this.inkyDist = Integer.parseInt(dataSplit[5]);
-		this.pinkyDist = Integer.parseInt(dataSplit[6]);
-		this.sueDist = Integer.parseInt(dataSplit[7]);
-		this.blinkyDist = Integer.parseInt(dataSplit[8]);
-		this.isInkyEdible = Boolean.parseBoolean(dataSplit[9]);
-		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[10]);
-		this.isSueEdible = Boolean.parseBoolean(dataSplit[11]);
-		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[12]);
+		this.numOfPillsLeft = Integer.parseInt(dataSplit[1]);
+		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[2]);
+		this.inkyDist = Integer.parseInt(dataSplit[3]);
+		this.blinkyDist = Integer.parseInt(dataSplit[4]);
+		this.pinkyDist = Integer.parseInt(dataSplit[5]);
+		this.sueDist = Integer.parseInt(dataSplit[6]);
+		this.isInkyEdible = Boolean.parseBoolean(dataSplit[7]);
+		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[8]);
+		this.isSueEdible = Boolean.parseBoolean(dataSplit[9]);
+		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[10]);
 
 	}
 
@@ -159,8 +151,6 @@ public class DataTuple {
 		StringBuilder stringbuilder = new StringBuilder();
 
 		stringbuilder.append(strategy + ";");
-		stringbuilder.append(closestPillDist + ";");
-		stringbuilder.append(closestPowerPillDist + ";");
 		stringbuilder.append(numOfPillsLeft + ";");
 		stringbuilder.append(numOfPowerPillsLeft + ";");
 		stringbuilder.append(inkyDist + ";");
@@ -174,26 +164,6 @@ public class DataTuple {
 		
 
 		return stringbuilder.toString();
-	}
-
-	private int getClosestPillOrPowerPillDist(Game game, int pillType) {
-		int[] indexArr;
-		boolean stillAvailable = false;
-		if (pillType == 0) { // normal pill
-			indexArr = game.getActivePillsIndices();
-		} else { // power pill
-			indexArr = game.getActivePowerPillsIndices();
-		}
-		if (indexArr.length == 0) {
-			return -1;
-		}
-		int[] temp = new int[indexArr.length];
-
-		for (int i = 0; i < indexArr.length; i++) {
-			
-			temp[i] = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), indexArr[i]);
-		}
-		return Arrays.stream(temp).min().getAsInt();
 	}
 
 	/**
@@ -309,10 +279,6 @@ public class DataTuple {
 			return discretizeNumberOfPills(numOfPillsLeft).toString();
 		case "numOfPowerPillsLeft":
 			return discretizeNumberOfPowerPills(numOfPowerPillsLeft).toString();
-		case "closestPillDist":
-			return discretizeDistance(closestPillDist).toString();
-		case "closestPowerPillDist":
-			return discretizeDistance(closestPowerPillDist).toString();
 		 case "isBlinkyEdible":
              return discretizeBoolean(this.isBlinkyEdible);
          case "isInkyEdible":
@@ -348,8 +314,7 @@ public class DataTuple {
 		if (map == null) {
 			map = new HashMap<>();
 			// make sure attribute names are correct
-			String[] strArr = { "strategy", "closestPowerPillDist",
-					"closestPillDist", "numOfPillsLeft", "numOfPowerPillsLeft", "isBlinkyEdible", 
+			String[] strArr = { "strategy", "numOfPillsLeft", "numOfPowerPillsLeft", "isBlinkyEdible", 
 					"isInkyEdible", "isPinkyEdible", "isSueEdible", "blinkyDist", "inkyDist", "pinkyDist", "sueDist"};
 			for (String str : strArr) {
 				map.put(str, discretizeAttrValue(str));

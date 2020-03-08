@@ -1,5 +1,6 @@
 package pacman.game;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
@@ -1671,5 +1672,57 @@ public final class Game
 		return caches[mazeIndex].getPathDistanceFromA2B(fromNodeIndex,toNodeIndex,lastMoveMade);
 	}
 
+	/**
+	 * Returns an arraylist of all pill indices that are available
+	 * @return arraylist with available pill indices
+	 */
+	public ArrayList<Integer> getAvailablePills() {
+		int[] indexPills = getPillIndices();
+		ArrayList<Integer> pillsToEat = new ArrayList<>();
+		
+		for (int i = 0; i < indexPills.length; i++) {
+			if (isPillStillAvailable(i)) {
+				pillsToEat.add(indexPills[i]);
+
+			}
+		}
+		return pillsToEat;
+	}
+	
+	/**
+	 * Returns an arraylist of all power pill indices that are available
+	 * @return arraylist with available power pill indices
+	 */
+	public ArrayList<Integer> getAvailablePowerPills() {
+		int[] indexPills = getPowerPillIndices();
+		ArrayList<Integer> pillsToEat = new ArrayList<>();
+		
+		for (int i = 0; i < indexPills.length; i++) {
+			if (isPillStillAvailable(i)) {
+				pillsToEat.add(indexPills[i]);
+
+			}
+		}
+		return pillsToEat;
+	}
+	
+	/**
+	 * Adds all available pills and power pills (indices) to one int[] and returns it
+	 * @return int[] with all available pill and power pill indices
+	 */
+	public int[] getAllAvailablePillsAndPowerPills() {
+		ArrayList<Integer> indexPills = getAvailablePills();
+		ArrayList<Integer> indexPowerPills = getAvailablePowerPills();
+		
+		int[] arr = new int[indexPills.size() + indexPowerPills.size()];
+
+		for (int i = 0; i < indexPills.size(); i++) {
+			arr[i] = indexPills.get(i);
+		}
+		for (int i = 0; i < indexPowerPills.size(); i++) {
+			arr[i] = indexPowerPills.get(i);
+		}
+		return arr;
+	}
 	
 }
