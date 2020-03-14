@@ -29,7 +29,7 @@ public class DecisionTree extends Controller<MOVE> {
 	public DecisionTree() {
 		classDecisionTree = "strategy";
 		dataset = new Dataset(DataSaverLoader.LoadPacManData()); //TODO: fix this error
-		attributeList = new ArrayList<String>(dataset.attributesWithValuesAndCounts.keySet()); // fill with attributes
+		attributeList = new ArrayList<String>(dataset.attributes.keySet()); // fill with attributes
 		attributeList.remove(classDecisionTree);
 	}
 	
@@ -54,7 +54,7 @@ public class DecisionTree extends Controller<MOVE> {
 			node = new Node(majorAttribute);
 			attributeList.remove(majorAttribute);
 			
-			HashMap<String, Integer> map = dataset.attributesWithValuesAndCounts.get(majorAttribute);
+			HashMap<String, Integer> map = dataset.attributes.get(majorAttribute);
 			List<String> bestAttributeValues = new ArrayList(map.keySet());
 			//selectAttribute();
 			
@@ -103,7 +103,7 @@ public class DecisionTree extends Controller<MOVE> {
 	 * @return
 	 */
 	public String getMajorityClass(Dataset D) {
-		HashMap<String, Integer> mapStrategy = D.attributesWithValuesAndCounts.get(classDecisionTree);
+		HashMap<String, Integer> mapStrategy = D.attributes.get(classDecisionTree);
 		List<String> valuesForStrategy = new ArrayList<>(mapStrategy.keySet());
 		String classMajority = "NONE";
 		int max = 0;

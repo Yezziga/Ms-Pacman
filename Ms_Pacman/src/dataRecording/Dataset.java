@@ -66,5 +66,12 @@ public class Dataset {
 		return new Dataset(arr);
 	}
 	
+	double minusPlog2(double p) {
+		double returnValue = 0;
+		if(p != 0)
+			returnValue = (-1) * p * Math.log(p) / Math.log(2);
+		return returnValue;
+	}
+	
 
 }
