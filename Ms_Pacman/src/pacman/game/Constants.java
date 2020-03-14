@@ -16,17 +16,24 @@ public final class Constants
 	 * repeated. If the previous action is not a legal move, a legal move is chosen 
 	 * uniformly at random.
 	 */
-	public enum MOVE 
+	public enum MOVE
 	{
-		UP 		{ public MOVE opposite(){return MOVE.DOWN;		};},	
-		RIGHT 	{ public MOVE opposite(){return MOVE.LEFT;		};}, 	
-		DOWN 	{ public MOVE opposite(){return MOVE.UP;		};},		
-		LEFT 	{ public MOVE opposite(){return MOVE.RIGHT;		};}, 	
-		NEUTRAL	{ public MOVE opposite(){return MOVE.NEUTRAL;	};};	
-		
+		UP 		{ public MOVE opposite(){return MOVE.DOWN;		};},
+		RIGHT 	{ public MOVE opposite(){return MOVE.LEFT;		};},
+		DOWN 	{ public MOVE opposite(){return MOVE.UP;		};},
+		LEFT 	{ public MOVE opposite(){return MOVE.RIGHT;		};},
+		NEUTRAL	{ public MOVE opposite(){return MOVE.NEUTRAL;	};};
+
 		public abstract MOVE opposite();
 	};
-	
+
+
+	public enum STRATEGY{
+		RUNAWAY,
+		CHASE,
+		EATPILLS
+	}
+
 	/**
 	 * Enumeration for the ghosts. The integer arguments are the initial lair times.
 	 */
@@ -36,15 +43,15 @@ public final class Constants
 		PINKY(60),
 		INKY(80),
 		SUE(100);
-		
+
 		public final int initialLairTime;
-		
+
 		GHOST(int lairTime)
 		{
 			this.initialLairTime=lairTime;
 		}
 	};
-	
+
 	/**
 	 * DM stands for Distance Metric, a simple enumeration for use with methods that 
 	 * require a distance metric. The metric available are as follows:
@@ -53,14 +60,14 @@ public final class Constants
 	 * MANHATTAN: Manhattan distance (absolute distance between x and y coordinates)
 	 */
 	public enum DM {PATH, EUCLID, MANHATTAN};
-	
+
 	public static final int PILL=10;						//points for a normal pill
 	public static final int POWER_PILL=50;					//points for a power pill
 	public static final int GHOST_EAT_SCORE=200;			//score for the first ghost eaten (doubles every time for the duration of a single power pill)
 	public static final int EDIBLE_TIME=200;				//initial time a ghost is edible for (decreases as level number increases) 	
 	public static final float EDIBLE_TIME_REDUCTION=0.9f;	//reduction factor by which edible time decreases as level number increases
 	public static final float LAIR_REDUCTION=0.9f;			//reduction factor by which lair times decrease as level number increases	
-	public static final int LEVEL_RESET_REDUCTION=6;	
+	public static final int LEVEL_RESET_REDUCTION=6;
 	public static final int COMMON_LAIR_TIME=40;			//time spend in lair after being eaten
 	public static final int LEVEL_LIMIT=4000;				//time limit for a level
 	public static final float GHOST_REVERSAL=0.0015f;		//probability of a global ghost reversal event	
@@ -75,18 +82,18 @@ public final class Constants
 	public static final int GHOST_SPEED_REDUCTION=2;		//difference in speed when ghosts are edible (every GHOST_SPEED_REDUCTION, a ghost remains stationary)
 	public static final int EDIBLE_ALERT=30;				//for display only (ghosts turning blue)
 	public static final int INTERVAL_WAIT=1;				//for quicker execution: check every INTERVAL_WAIT ms to see if controllers have returned
-		
+
 	//for Competition
 	public static final int WAIT_LIMIT=5000;				//time limit in milliseconds for the controller to initialise;
 	public static final int MEMORY_LIMIT=512;				//memory limit in MB for controllers (including the game)
 	public static final int IO_LIMIT=10;					//limit in MB on the files written by controllers
-	
+
 	//for Maze
 	public static final String pathMazes="data/mazes";
 	public static final String pathDistances="data/distances";
 	public static final String[] nodeNames={"a","b","c","d"};
 	public static final String[] distNames={"da","db","dc","dd"};
-	
+
 	//for GameView
 	public static final int MAG=2;
 	public static final int GV_WIDTH=114;
@@ -94,6 +101,6 @@ public final class Constants
 
 	public static String pathImages="data/images";
 	public static String[] mazeNames={"maze-a.png","maze-b.png","maze-c.png","maze-d.png"};
-	
+
 	private Constants(){}
 }
