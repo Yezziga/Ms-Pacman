@@ -6,6 +6,7 @@ import dataRecording.Dataset;
 import pacman.controllers.Controller;
 //bara som exempel, kommer bytas ut
 import pacman.controllers.examples.AggressiveGhosts;
+import pacman.controllers.examples.NearestPillPacMan;
 import pacman.game.Constants;
 import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
@@ -146,7 +147,9 @@ public class DecisionTree extends Controller<MOVE> {
 	public MOVE getMove(Game game, long timeDue) {
 		MOVE results;
 		
-		
+		//Used as an example
+		NearestPillPacMan pacman = new NearestPillPacMan();
+		results = pacman.getMove(game, timeDue);
 		
 		MOVE nextMove;
 		
@@ -161,7 +164,55 @@ public class DecisionTree extends Controller<MOVE> {
 				if(game.isPillStillAvailable(i))
 					targets.add(pills[i]);
 			}
+			for(int i = 0; i < powerPills.length; i++) {
+				if(game.isPowerPillStillAvailable(i))
+					targets.add(powerPills[i]);
+			}
 			
+			int[] targetsArray = new int[targets.size()];
+			
+			for(int i = 0; i < targetsArray.length; i++) {
+				targetsArray[i] = targets.get(i);
+			}
+			
+			nextMove = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), targetsArray, Constants.DM.PATH), Constants.DM.PATH);
+			if(results == nextMove)
+				numberOfCorrectDecisions++;
+			else
+				System.err.println("Not same decision as pacman, Chose: " + results.toString());
+			return nextMove;
+		case CHASE:
+			int minDistGChase = Integer.MAX_VALUE;
+			GHOST ghostAPerseguir = null;
+			
+			for(GHOST ghost : GHOST.values()) {
+				int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost));
+				if(distance < minDistGChase) {
+					minDistGChase = distance;
+					ghostAPerseguir = ghost;
+				}
+			}
+			nextMove = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghostAPerseguir), Constants.DM.PATH);
+			if(results == nextMove)
+				numberOfCorrectDecisions++;
+			return nextMove;
+		case FLEE:
+			int minDistGRunAWAY = Integer.MAX_VALUE;
+			GHOST fleeFromGhost = null;
+			
+			for(GHOST ghost : GHOST.values()) {
+				int distance = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(ghost));
+				if(distance < minDistGRunAWAY) {
+					minDistGRunAWAY = distance;
+					fleeFromGhost = ghost;
+				}
+			}
+			nextMove = game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(fleeFromGhost), Constants.DM.PATH);
+			if(results == nextMove)
+				numberOfCorrectDecisions++;
+			return nextMove;
+			default:
+				return MOVE.NEUTRAL;
 		}
 	}
 

@@ -86,12 +86,12 @@ public class Executor
 		 */
 		
 		//run game for data collection
-		exec.runGameTimed(new DataCollectorController(new KeyBoardInput()),new StarterGhosts(),visual);
+		//exec.runGameTimed(new DataCollectorController(new KeyBoardInput()),new StarterGhosts(),visual);
 		
-		//DecisionTree decisionTree = new DecisionTree();
-		//decisionTree.buildDecisionTree();
+		DecisionTree decisionTree = new DecisionTree();
+		decisionTree.buildDecisionTree();
 		
-		//exec.runGameTimed(decisionTree,new StarterGhosts(),visual);
+		exec.runGameTimed(decisionTree,new StarterGhosts(),visual);
 	}
 	
     /**
