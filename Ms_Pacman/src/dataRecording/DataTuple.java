@@ -6,6 +6,8 @@ import pacman.game.Constants.GHOST;
 import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 
+import java.util.HashMap;
+
 public class DataTuple {
 
 	public enum DiscreteTag {
@@ -25,8 +27,14 @@ public class DataTuple {
 		}
 	}
 
-	public MOVE DirectionChosen;
+	/**
+	 * name of attribute : attributeValue
+	 */
+	HashMap<String, String> hash;
 
+	public Constants.STRATEGY strategy;
+
+	public MOVE directionChosen;
 	// General game state this - not normalized!
 	public int mazeIndex;
 	public int currentLevel;
@@ -65,8 +73,9 @@ public class DataTuple {
 			move = game.getPacmanLastMoveMade();
 		}
 
-		this.DirectionChosen = move;
+		this.strategy = game.strategy;
 
+		this.directionChosen = move;
 		this.mazeIndex = game.getMazeIndex();
 		this.currentLevel = game.getCurrentLevel();
 		this.pacmanPosition = game.getPacmanCurrentNodeIndex();
@@ -79,76 +88,70 @@ public class DataTuple {
 
 		if (game.getGhostLairTime(GHOST.BLINKY) == 0) {
 			this.isBlinkyEdible = game.isGhostEdible(GHOST.BLINKY);
-			this.blinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY));
+			this.blinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+					game.getGhostCurrentNodeIndex(GHOST.BLINKY));
 		}
 
 		if (game.getGhostLairTime(GHOST.INKY) == 0) {
 			this.isInkyEdible = game.isGhostEdible(GHOST.INKY);
-			this.inkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.INKY));
+			this.inkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+					game.getGhostCurrentNodeIndex(GHOST.INKY));
 		}
 
 		if (game.getGhostLairTime(GHOST.PINKY) == 0) {
 			this.isPinkyEdible = game.isGhostEdible(GHOST.PINKY);
-			this.pinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.PINKY));
+			this.pinkyDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+					game.getGhostCurrentNodeIndex(GHOST.PINKY));
 		}
 
 		if (game.getGhostLairTime(GHOST.SUE) == 0) {
 			this.isSueEdible = game.isGhostEdible(GHOST.SUE);
-			this.sueDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.SUE));
+			this.sueDist = game.getShortestPathDistance(game.getPacmanCurrentNodeIndex(),
+					game.getGhostCurrentNodeIndex(GHOST.SUE));
 		}
 
-		this.blinkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.PATH);
-		this.inkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.INKY), DM.PATH);
-		this.pinkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.PINKY), DM.PATH);
-		this.sueDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(), game.getGhostCurrentNodeIndex(GHOST.SUE), DM.PATH);
+		this.blinkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(GHOST.BLINKY), DM.PATH);
+		this.inkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(GHOST.INKY), DM.PATH);
+		this.pinkyDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(GHOST.PINKY), DM.PATH);
+		this.sueDir = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
+				game.getGhostCurrentNodeIndex(GHOST.SUE), DM.PATH);
 
 		this.numberOfNodesInLevel = game.getNumberOfNodes();
 		this.numberOfTotalPillsInLevel = game.getNumberOfPills();
 		this.numberOfTotalPowerPillsInLevel = game.getNumberOfPowerPills();
 	}
 
+	// TODO: choose attributes
 	public DataTuple(String data) {
 		String[] dataSplit = data.split(";");
 
-		this.DirectionChosen = MOVE.valueOf(dataSplit[0]);
+		this.strategy = Constants.STRATEGY.valueOf(dataSplit[0]);
 
-		this.mazeIndex = Integer.parseInt(dataSplit[1]);
-		this.currentLevel = Integer.parseInt(dataSplit[2]);
-		this.pacmanPosition = Integer.parseInt(dataSplit[3]);
-		this.pacmanLivesLeft = Integer.parseInt(dataSplit[4]);
-		this.currentScore = Integer.parseInt(dataSplit[5]);
-		this.totalGameTime = Integer.parseInt(dataSplit[6]);
-		this.currentLevelTime = Integer.parseInt(dataSplit[7]);
-		this.numOfPillsLeft = Integer.parseInt(dataSplit[8]);
-		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[9]);
-		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[10]);
-		this.isInkyEdible = Boolean.parseBoolean(dataSplit[11]);
-		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[12]);
-		this.isSueEdible = Boolean.parseBoolean(dataSplit[13]);
-		this.blinkyDist = Integer.parseInt(dataSplit[14]);
-		this.inkyDist = Integer.parseInt(dataSplit[15]);
-		this.pinkyDist = Integer.parseInt(dataSplit[16]);
-		this.sueDist = Integer.parseInt(dataSplit[17]);
-		this.blinkyDir = MOVE.valueOf(dataSplit[18]);
-		this.inkyDir = MOVE.valueOf(dataSplit[19]);
-		this.pinkyDir = MOVE.valueOf(dataSplit[20]);
-		this.sueDir = MOVE.valueOf(dataSplit[21]);
-		this.numberOfNodesInLevel = Integer.parseInt(dataSplit[22]);
-		this.numberOfTotalPillsInLevel = Integer.parseInt(dataSplit[23]);
-		this.numberOfTotalPowerPillsInLevel = Integer.parseInt(dataSplit[24]);
+		this.numOfPillsLeft = Integer.parseInt(dataSplit[1]);
+		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[2]);
+		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[3]);
+		this.isInkyEdible = Boolean.parseBoolean(dataSplit[4]);
+		this.isPinkyEdible = Boolean.parseBoolean(dataSplit[5]);
+		this.isSueEdible = Boolean.parseBoolean(dataSplit[6]);
+		this.blinkyDist = Integer.parseInt(dataSplit[7]);
+		this.inkyDist = Integer.parseInt(dataSplit[8]);
+		this.pinkyDist = Integer.parseInt(dataSplit[9]);
+		this.sueDist = Integer.parseInt(dataSplit[10]);
+		this.blinkyDir = MOVE.valueOf(dataSplit[11]);
+		this.inkyDir = MOVE.valueOf(dataSplit[12]);
+		this.pinkyDir = MOVE.valueOf(dataSplit[13]);
+		this.sueDir = MOVE.valueOf(dataSplit[14]);
+
 	}
 
 	public String getSaveString() {
 		StringBuilder stringbuilder = new StringBuilder();
 
-		stringbuilder.append(this.DirectionChosen + ";");
-		stringbuilder.append(this.mazeIndex + ";");
-		stringbuilder.append(this.currentLevel + ";");
-		stringbuilder.append(this.pacmanPosition + ";");
-		stringbuilder.append(this.pacmanLivesLeft + ";");
-		stringbuilder.append(this.currentScore + ";");
-		stringbuilder.append(this.totalGameTime + ";");
-		stringbuilder.append(this.currentLevelTime + ";");
+		stringbuilder.append(this.strategy + ";");
+
 		stringbuilder.append(this.numOfPillsLeft + ";");
 		stringbuilder.append(this.numOfPowerPillsLeft + ";");
 		stringbuilder.append(this.isBlinkyEdible + ";");
@@ -163,17 +166,13 @@ public class DataTuple {
 		stringbuilder.append(this.inkyDir + ";");
 		stringbuilder.append(this.pinkyDir + ";");
 		stringbuilder.append(this.sueDir + ";");
-		stringbuilder.append(this.numberOfNodesInLevel + ";");
-		stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
-		stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
-
 		return stringbuilder.toString();
 	}
 
 	/**
-	 * Used to normalize distances. Done via min-max normalization. Supposes
-	 * that minimum possible distance is 0. Supposes that the maximum possible
-	 * distance is 150.
+	 * Used to normalize distances. Done via min-max normalization. Supposes that
+	 * minimum possible distance is 0. Supposes that the maximum possible distance
+	 * is 150.
 	 * 
 	 * @param dist
 	 *            Distance to be normalized
@@ -201,6 +200,10 @@ public class DataTuple {
 	public DiscreteTag discretizePosition(int pos) {
 		double aux = this.normalizePosition(pos);
 		return DiscreteTag.DiscretizeDouble(aux);
+	}
+
+	public String discretizeBoolean(boolean value) {
+		return value ? "true" : "false";
 	}
 
 	public double normalizeBoolean(boolean bool) {
@@ -249,8 +252,8 @@ public class DataTuple {
 
 	/**
 	 * 
-	 * Max score value lifted from highest ranking PacMan controller on PacMan
-	 * vs Ghosts website: http://pacman-vs-ghosts.net/controllers/1104
+	 * Max score value lifted from highest ranking PacMan controller on PacMan vs
+	 * Ghosts website: http://pacman-vs-ghosts.net/controllers/1104
 	 * 
 	 * @param score
 	 * @return
@@ -264,4 +267,68 @@ public class DataTuple {
 		return DiscreteTag.DiscretizeDouble(aux);
 	}
 
+	/**
+	 * Discretize the given attribute value and returns it as a string
+	 * 
+	 * @param attributeValue
+	 *            the attribute value to discretize
+	 * @return a string of the discretized attribute value or "None" as default.
+	 */
+	// TODO: add necessary values to discretize
+	public String discretize(String attributeValue) {
+		switch (attributeValue) {
+		case "strategy":
+			return strategy.toString();
+		case "numOfPillsLeft":
+			return discretizeNumberOfPills(numOfPillsLeft).toString();
+		case "numOfPowerPillsLeft":
+			return discretizeNumberOfPowerPills(numOfPowerPillsLeft).toString();
+		case "isBlinkyEdible":
+			return discretizeBoolean(isBlinkyEdible);
+		case "isInkyEdible":
+			return discretizeBoolean(isInkyEdible);
+		case "isPinkyEdible":
+			return discretizeBoolean(isPinkyEdible);
+		case "isSueEdible":
+			return discretizeBoolean(isSueEdible);
+		case "blinkyDist":
+			return discretizeDistance(blinkyDist).toString();
+		case "inkyDist":
+			return discretizeDistance(inkyDist).toString();
+		case "pinkyDist":
+			return discretizeDistance(pinkyDist).toString();
+		case "sueDist":
+			return discretizeDistance(sueDist).toString();
+		case "blinkyDir":
+			return discretizeDistance(blinkyDist).toString();
+		case "inkyDir":
+			return discretizeDistance(inkyDist).toString();
+		case "pinkyDir":
+			return discretizeDistance(pinkyDist).toString();
+		case "sueDir":
+			return discretizeDistance(sueDist).toString();
+		default:
+			return "None";
+		}
+	}
+
+	/**
+	 * Creates and fills a hashmap if it does not already exist, or returns the
+	 * hashmap
+	 * 
+	 * @return a HashMap with attribute name as key and attribute value as value
+	 */
+	public HashMap<String, String> getHash() {
+
+		if (this.hash == null) {
+			hash = new HashMap<>();
+			// TODO: make sure attribute names are correct
+			String[] attrs = { "strategy", "numOfPillsLeft", "numOfPowerPillsLeft", "isBlinkyEdible", "isInkyEdible",
+					"isPinkyEdible", "isSueEdible", "blinkyDist", "inkyDist", "pinkyDist", "sueDist", "blinkyDir", "inkyDir", "pinkyDir", "sueDir" };
+			for (String attr : attrs) {
+				this.hash.put(attr, discretize(attr));
+			}
+		}
+		return hash;
+	}
 }

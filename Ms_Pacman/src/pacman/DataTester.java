@@ -10,7 +10,7 @@ public class DataTester {
 		int counter = 0;
 		for (DataTuple d : tuples) {
 			System.out.println("Normal: "+d.getSaveString());
-			System.out.print("Discrete: "+d.DirectionChosen + ", " + d.mazeIndex + ", " + d.currentLevel + ", " + d.discretizePosition(d.pacmanPosition) + ", "
+			System.out.print("Discrete: "+d.directionChosen + ", " + d.mazeIndex + ", " + d.currentLevel + ", " + d.discretizePosition(d.pacmanPosition) + ", "
 					+ d.pacmanLivesLeft + ", " + d.discretizeCurrentScore(d.currentScore) + ", " + d.discretizeCurrentLevelTime(d.currentLevelTime) + ", "
 					+ d.discretizeNumberOfPills(d.numOfPillsLeft) + ", " + d.discretizeNumberOfPowerPills(d.numOfPowerPillsLeft) + ", " + d.isBlinkyEdible
 					+ ", " + d.isInkyEdible + ", " + d.isPinkyEdible + ", " + d.isSueEdible + ", " + d.discretizeDistance(d.blinkyDist) + ", "

@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Map.Entry;
 import pacman.game.Constants.DM;
 import pacman.game.Constants.MOVE;
+import pacman.game.Constants.STRATEGY;
 import pacman.game.internal.Ghost;
 import pacman.game.internal.Maze;
 import pacman.game.internal.Node;
@@ -68,7 +69,8 @@ public final class Game
 	}
 	
 	private Random rnd;
-	private long seed;	
+	private long seed;
+	public STRATEGY strategy;	
 	
 	/////////////////////////////////////////////////////////////////////////////
 	///////////////////  Constructors and initialisers  /////////////////////////
