@@ -146,6 +146,23 @@ public class DecisionTree extends Controller<MOVE> {
 	public MOVE getMove(Game game, long timeDue) {
 		MOVE results;
 		
+		
+		
+		MOVE nextMove;
+		
+		switch(search(game)) {
+		case EATPILLS:
+			int[] pills=game.getPillIndices();
+			int[] powerPills = game.getPowerPillIndices();
+			
+			ArrayList<Integer> targets = new ArrayList<Integer>();
+			
+			for(int i = 0; i < pills.length; i++) {
+				if(game.isPillStillAvailable(i))
+					targets.add(pills[i]);
+			}
+			
+		}
 	}
 
 }
