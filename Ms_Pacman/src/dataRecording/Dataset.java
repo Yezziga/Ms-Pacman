@@ -5,11 +5,11 @@ import java.util.HashMap;
 
 // TODO
 public class Dataset {
-	public DataTuple[] dataset;
+	public ArrayList<DataTuple> dataset;
 	public HashMap<String, HashMap<String, Integer>> attributes; // attribute, name of attribute value, amount of times 
 	
-	public Dataset(DataTuple[] dataTuples) {
-		dataset = dataTuples;
+	public Dataset(ArrayList<DataTuple> data) {
+		dataset = data;
 		attributes = new HashMap<>();
 		fillMap();
 	}
@@ -45,7 +45,7 @@ public class Dataset {
 		
 	}
 
-	public DataTuple[] getTuples() {
+	public ArrayList<DataTuple> getTuples() {
 		return dataset;
 	}
 
@@ -62,15 +62,7 @@ public class Dataset {
 				newSet.add(dataTuple);
 			}
 		}
-		DataTuple[] arr = (DataTuple[]) newSet.toArray();
-		return new Dataset(arr);
-	}
-	
-	double minusPlog2(double p) {
-		double returnValue = 0;
-		if(p != 0)
-			returnValue = (-1) * p * Math.log(p) / Math.log(2);
-		return returnValue;
+		return new Dataset(newSet);
 	}
 	
 

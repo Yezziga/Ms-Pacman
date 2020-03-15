@@ -38,18 +38,22 @@ public class DecisionTree extends Controller<MOVE> {
 	}
 	
 	public Node generateTree(Dataset dataset, ArrayList<String> attributeList) {
+		//Step 1
 		Node node = null;
 		
+		//Step 2
 		if(allTuplesSameClass(dataset)) {
 			node = new Node(dataset.dataset.get(0).strategy.toString());
 			return node;
+			//Step 3
 		} else if(attributeList.isEmpty()) {
 			node = new Node(getMajorityClass(dataset).toString());
 			return node;
+			//step 4
 		} else {
 			
-			ID3 selector = new ID3();
-			String majorAttribute = selector.ChoiceOfAttributes(dataset, attributeList);
+			AttributeSelection selector = new ID3();
+			String majorAttribute = selector.AttributeSelection(dataset, attributeList);
 			
 			node = new Node(majorAttribute);
 			attributeList.remove(majorAttribute);
@@ -65,10 +69,10 @@ public class DecisionTree extends Controller<MOVE> {
 				
 				ArrayList<String> attributeListAux = (ArrayList) attributeList.clone();
 				
-				Dataset subsetDj = dataset.getSubDataSetWithValue(majorAttribute, value);
+				Dataset subsetDj = dataset.getSubset(majorAttribute, value);
 				
 				if(subsetDj.dataset.isEmpty()) {
-					Node child = new Node(getMajorityClass(dataset).toString());
+					Node child = new Node(getMajorityClass(dataset));
 					node.newChild(value, child);
 				}
 				else {
