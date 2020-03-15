@@ -12,11 +12,11 @@ import java.util.HashMap;
  *
  */
 public class Dataset {
-	public DataTuple[] dataset;
+	private DataTuple[] dataset;
 	/**
 	 * Name of attribute : attributeVale : number of occurrences
 	 */
-	public HashMap<String, HashMap<String, Integer>> attributes;
+	private HashMap<String, HashMap<String, Integer>> attributes;
 
 	public Dataset(DataTuple[] data) {
 		dataset = data;
@@ -79,6 +79,14 @@ public class Dataset {
 				}
 			}
 		}
+	}
+	
+	public DataTuple[] getTuples() {
+		return dataset;
+	}
+	
+	public HashMap<String, HashMap<String, Integer> > getMap(){
+		return attributes;
 	}
 
 	// TODO: text to print out nr of occurrence for each attribute value

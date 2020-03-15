@@ -28,8 +28,13 @@ public final class Constants
 	};
 
 
+	/**
+	 * Enum for which strategies the AI can choose
+	 * @author Jessica
+	 *
+	 */
 	public enum STRATEGY{
-		RUNAWAY,
+		FLEE,
 		CHASE,
 		EATPILLS
 	}

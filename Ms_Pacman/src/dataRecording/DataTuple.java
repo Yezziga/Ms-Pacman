@@ -124,22 +124,12 @@ public class DataTuple {
 		this.numberOfTotalPowerPillsInLevel = game.getNumberOfPowerPills();
 	}
 
-	//TODO: choose attributes
+	// TODO: choose attributes
 	public DataTuple(String data) {
 		String[] dataSplit = data.split(";");
 
 		this.strategy = Constants.STRATEGY.valueOf(dataSplit[0]);
 
-		/*
-		 * this.DirectionChosen = MOVE.valueOf(dataSplit[1]); this.mazeIndex =
-		 * Integer.parseInt(dataSplit[2]); this.currentLevel =
-		 * Integer.parseInt(dataSplit[3]); this.pacmanPosition =
-		 * Integer.parseInt(dataSplit[4]); this.pacmanLivesLeft =
-		 * Integer.parseInt(dataSplit[5]); this.currentScore =
-		 * Integer.parseInt(dataSplit[6]); this.totalGameTime =
-		 * Integer.parseInt(dataSplit[7]); this.currentLevelTime =
-		 * Integer.parseInt(dataSplit[8]);
-		 */
 		this.numOfPillsLeft = Integer.parseInt(dataSplit[1]);
 		this.numOfPowerPillsLeft = Integer.parseInt(dataSplit[2]);
 		this.isBlinkyEdible = Boolean.parseBoolean(dataSplit[3]);
@@ -150,14 +140,11 @@ public class DataTuple {
 		this.inkyDist = Integer.parseInt(dataSplit[8]);
 		this.pinkyDist = Integer.parseInt(dataSplit[9]);
 		this.sueDist = Integer.parseInt(dataSplit[10]);
-		/*
-		 * this.blinkyDir = MOVE.valueOf(dataSplit[19]); this.inkyDir =
-		 * MOVE.valueOf(dataSplit[20]); this.pinkyDir = MOVE.valueOf(dataSplit[21]);
-		 * this.sueDir = MOVE.valueOf(dataSplit[22]); this.numberOfNodesInLevel =
-		 * Integer.parseInt(dataSplit[23]); this.numberOfTotalPillsInLevel =
-		 * Integer.parseInt(dataSplit[24]); this.numberOfTotalPowerPillsInLevel =
-		 * Integer.parseInt(dataSplit[25]);
-		 */
+		this.blinkyDir = MOVE.valueOf(dataSplit[11]);
+		this.inkyDir = MOVE.valueOf(dataSplit[12]);
+		this.pinkyDir = MOVE.valueOf(dataSplit[13]);
+		this.sueDir = MOVE.valueOf(dataSplit[14]);
+
 	}
 
 	public String getSaveString() {
@@ -165,14 +152,6 @@ public class DataTuple {
 
 		stringbuilder.append(this.strategy + ";");
 
-		// stringbuilder.append(this.DirectionChosen + ";");
-		// stringbuilder.append(this.mazeIndex + ";");
-		// stringbuilder.append(this.currentLevel + ";");
-		// stringbuilder.append(this.pacmanPosition + ";");
-		// stringbuilder.append(this.pacmanLivesLeft + ";");
-		// stringbuilder.append(this.currentScore + ";");
-		// stringbuilder.append(this.totalGameTime + ";");
-		// stringbuilder.append(this.currentLevelTime + ";");
 		stringbuilder.append(this.numOfPillsLeft + ";");
 		stringbuilder.append(this.numOfPowerPillsLeft + ";");
 		stringbuilder.append(this.isBlinkyEdible + ";");
@@ -183,14 +162,10 @@ public class DataTuple {
 		stringbuilder.append(this.inkyDist + ";");
 		stringbuilder.append(this.pinkyDist + ";");
 		stringbuilder.append(this.sueDist + ";");
-		// stringbuilder.append(this.blinkyDir + ";");
-		// stringbuilder.append(this.inkyDir + ";");
-		// stringbuilder.append(this.pinkyDir + ";");
-		// stringbuilder.append(this.sueDir + ";");
-		// stringbuilder.append(this.numberOfNodesInLevel + ";");
-		// stringbuilder.append(this.numberOfTotalPillsInLevel + ";");
-		// stringbuilder.append(this.numberOfTotalPowerPillsInLevel + ";");
-
+		stringbuilder.append(this.blinkyDir + ";");
+		stringbuilder.append(this.inkyDir + ";");
+		stringbuilder.append(this.pinkyDir + ";");
+		stringbuilder.append(this.sueDir + ";");
 		return stringbuilder.toString();
 	}
 
@@ -324,6 +299,14 @@ public class DataTuple {
 			return discretizeDistance(pinkyDist).toString();
 		case "sueDist":
 			return discretizeDistance(sueDist).toString();
+		case "blinkyDir":
+			return discretizeDistance(blinkyDist).toString();
+		case "inkyDir":
+			return discretizeDistance(inkyDist).toString();
+		case "pinkyDir":
+			return discretizeDistance(pinkyDist).toString();
+		case "sueDir":
+			return discretizeDistance(sueDist).toString();
 		default:
 			return "None";
 		}
@@ -339,9 +322,9 @@ public class DataTuple {
 
 		if (this.hash == null) {
 			hash = new HashMap<>();
-			// TODO: make sure attribute names are correct 
+			// TODO: make sure attribute names are correct
 			String[] attrs = { "strategy", "numOfPillsLeft", "numOfPowerPillsLeft", "isBlinkyEdible", "isInkyEdible",
-					"isPinkyEdible", "isSueEdible", "blinkyDist", "inkyDist", "pinkyDist", "sueDist" };
+					"isPinkyEdible", "isSueEdible", "blinkyDist", "inkyDist", "pinkyDist", "sueDist", "blinkyDir", "inkyDir", "pinkyDir", "sueDir" };
 			for (String attr : attrs) {
 				this.hash.put(attr, discretize(attr));
 			}

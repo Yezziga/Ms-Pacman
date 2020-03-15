@@ -10,14 +10,12 @@ import pacman.game.Constants.STRATEGY;
 import pacman.game.Game;
 
 /*
- * This is the class you need to modify for your entry. In particular, you need to
- * fill in the getAction() method. Any additional classes you write should either
- * be placed in this package or sub-packages (e.g., game.entries.pacman.mypackage).
+ * Our pacman AI to compare with, working the same way as the StarterPacMan, 
+ * but adds STRATEGY to game
  */
 public class MyPacMan extends Controller<MOVE>
 {
-	private MOVE myMove=MOVE.NEUTRAL;
-	 private static final int MIN_DISTANCE=25;	//if a ghost is this close, run away
+	 private static final int MIN_DISTANCE=15;	//if a ghost is this close, run away
 
 	    @Override
 	    public MOVE getMove(Game game,long timeDue)
@@ -28,7 +26,7 @@ public class MyPacMan extends Controller<MOVE>
 	        for(GHOST ghost : GHOST.values())
 	            if(game.getGhostEdibleTime(ghost)==0 && game.getGhostLairTime(ghost)==0)
 	                if(game.getShortestPathDistance(current,game.getGhostCurrentNodeIndex(ghost))<MIN_DISTANCE) {
-	                    game.strategy = STRATEGY.RUNAWAY;
+	                    game.strategy = STRATEGY.FLEE;
 	                    return game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(),game.getGhostCurrentNodeIndex(ghost),DM.PATH);
 	                }
 
