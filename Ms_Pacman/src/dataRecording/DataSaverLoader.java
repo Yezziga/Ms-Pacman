@@ -10,17 +10,31 @@ import pacman.game.util.*;
  */
 public class DataSaverLoader {
 	
-//	private static String FileName = "trainingData.txt";
-	private static String FileName = "testData.txt";
+	private static String trainFile = "trainingData.txt";
+	private static String testFile = "testData.txt";
 	
 	public static void SavePacManData(DataTuple data)
 	{
-		IO.saveFile(FileName, data.getSaveString(), true);
+		IO.saveFile(trainFile, data.getSaveString(), true);
 	}
 	
 	public static DataTuple[] LoadPacManData()
 	{
-		String data = IO.loadFile(FileName);
+		String data = IO.loadFile(trainFile);
+		String[] dataLine = data.split("\n");
+		DataTuple[] dataTuples = new DataTuple[dataLine.length];
+		
+		for(int i = 0; i < dataLine.length; i++)
+		{
+			dataTuples[i] = new DataTuple(dataLine[i]);
+		}
+		
+		return dataTuples;
+	}
+	
+	public static DataTuple[] LoadPacManData(String fileName)
+	{
+		String data = IO.loadFile(fileName);
 		String[] dataLine = data.split("\n");
 		DataTuple[] dataTuples = new DataTuple[dataLine.length];
 		
@@ -36,8 +50,8 @@ public class DataSaverLoader {
 	 * Returns the number of tuples in the testing set.
 	 * @return
 	 */
-	public static int getNrOfTuples () {
-		String data = IO.loadFile(FileName);
+	public static int getNrOfTuples (String fileName) {
+		String data = IO.loadFile(fileName);
 		String[] dataLine = data.split("\n");
 		return dataLine.length;
 	}

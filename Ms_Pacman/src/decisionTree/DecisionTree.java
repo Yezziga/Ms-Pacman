@@ -28,7 +28,7 @@ public class DecisionTree extends Controller<MOVE> {
 	 * Label to classify
 	 */
 	private String classLabel;
-	private Dataset dataset;
+
 	/**
 	 * Name of attributes
 	 */
@@ -43,13 +43,33 @@ public class DecisionTree extends Controller<MOVE> {
 	public DecisionTree() {
 
 		classLabel = "strategy";
-		dataset = new Dataset(DataSaverLoader.LoadPacManData());
-		listAttibutes = new ArrayList<String>(dataset.getMap().keySet());
+		Dataset trainingSet = new Dataset(DataSaverLoader.LoadPacManData("trainingData.txt"));
+		listAttibutes = new ArrayList<String>(trainingSet.getMap().keySet());
 		listAttibutes.remove(classLabel);
-	}
-
-	public void buildTree() {
-		root = generateTree(dataset, listAttibutes);
+		
+		root = generateTree(trainingSet, listAttibutes);
+//		new TreeVisualizer(root);
+		
+		Dataset testingSet = new Dataset(DataSaverLoader.LoadPacManData("testData.txt"));
+		
+		numberOfCorrectDecisions = 0;
+		totalDecisions = testingSet.getTuples().length;
+		
+		for(int i=0; i<testingSet.getTuples().length; i++) {
+			totalDecisions++;
+			STRATEGY predictedStrat = searchForStrategy(root, testingSet.get(i));
+			if(predictedStrat == testingSet.get(i).strategy) {
+				numberOfCorrectDecisions++;
+			}
+		}
+		
+		System.out.println("ACCURACY FOR TESTING SET");
+		System.out.println("number of correct predictions: " + numberOfCorrectDecisions);
+		System.out.println("Total predictions: " + totalDecisions);
+		double accuracy= (double) Math.ceil((double)numberOfCorrectDecisions / (double) totalDecisions *100);
+		System.out.println("Accuracy: " + accuracy + "%");
+		System.out.println();
+		System.out.println();
 	}
 
 	/**
@@ -81,7 +101,7 @@ public class DecisionTree extends Controller<MOVE> {
 		// Step 4
 		else {
 			// Step 4.1 - choose the current attribute A through attribute selection
-			String attributeA = attributeSelection(dataset.getTuples(), attributeList);
+			String attributeA = attributeSelection(dataset, attributeList);
 
 			// Step 4.2 - label node as attributeA & remove from attributeList
 			node = new Node(attributeA);
@@ -160,10 +180,10 @@ public class DecisionTree extends Controller<MOVE> {
 	/**
 	 * Traverses from the root and searches for the strategy
 	 * @param node
-	 * @param game
+	 * @param tuple
 	 * @return
 	 */
-	public STRATEGY searchForStrategy(Node node, DataTuple game) {
+	public STRATEGY searchForStrategy(Node node, DataTuple tuple) {
 		STRATEGY strategy = null;
 		// set strategy so pacman eats pills
 		if (node.isLeaf())
@@ -171,13 +191,13 @@ public class DecisionTree extends Controller<MOVE> {
 		//
 		else {
 			// calculate the value for the node
-			String valueNode = game.discretize(node.getLabel());
+			String valueNode = tuple.discretize(node.getLabel());
 			TreeMap<String, Node> tree = node.getChildren();
 			Node nextNode = (Node) tree.get(valueNode);
 			if (nextNode == null) {
 				nextNode = (Node) tree.get("default");
 			}
-			strategy = searchForStrategy(nextNode, game);
+			strategy = searchForStrategy(nextNode, tuple);
 		}
 		return strategy;
 	}
@@ -201,13 +221,13 @@ public class DecisionTree extends Controller<MOVE> {
 	 * @param attributes
 	 * @return the attribute (name) with the highest gain raitio
 	 */
-	public String attributeSelection(DataTuple[] tuples, ArrayList<String> attributes) {
+	public String attributeSelection(Dataset dataset, ArrayList<String> attributes) {
 		String attribute = attributes.get(0);
 		float bestAttribute = 0;
 		float currentAttribute = 0;
 
 		for (int i = 0; i < attributes.size(); i++) {
-			currentAttribute = informationGain(attributes.get(i));
+			currentAttribute = informationGain(dataset, attributes.get(i));
 			if (currentAttribute > bestAttribute) {
 				attribute = attributes.get(i);
 			}
@@ -223,14 +243,14 @@ public class DecisionTree extends Controller<MOVE> {
 	 * @param attribute
 	 * @return
 	 */
-	private float informationGain(String attribute) {
+	private float informationGain(Dataset dataset, String attribute) {
 		float gain = 0;
 		HashMap<String, Integer> map = dataset.getMap().get(attribute);
 		ArrayList<String> attributeValues = new ArrayList<>(map.keySet());
 		float infoD = 0;
 		float infoAD = 0;
 		infoD = calculateEntropy(map, dataset, attribute, attributeValues);
-		infoAD = informationSplit(map, attribute, attributeValues);
+		infoAD = informationSplit(dataset, map, attribute, attributeValues);
 		gain = infoD - infoAD;
 		float gainRatio = calculateGainRatio(gain, infoAD);
 
@@ -288,7 +308,7 @@ public class DecisionTree extends Controller<MOVE> {
 	 * @param attributeValues
 	 * @return
 	 */
-	private float informationSplit(HashMap<String, Integer> map, String attribute, ArrayList<String> attributeValues) {
+	private float informationSplit(Dataset dataset, HashMap<String, Integer> map, String attribute, ArrayList<String> attributeValues) {
 		float infoAD = 0;
 		for (String nrOfOccurrences : attributeValues) {
 			Dataset dt = dataset.getSubDataset(attribute, nrOfOccurrences);
@@ -303,14 +323,15 @@ public class DecisionTree extends Controller<MOVE> {
 
 	@Override
 	public MOVE getMove(Game game, long timeDue) {
-		MOVE pacManResult;
-		MyPacMan pacman = new MyPacMan();
-		pacManResult = pacman.getMove(game, timeDue);
 
-		// Calculates decisionTree-based nextMove.
 		MOVE nextMove;
+		
+		STRATEGY predictedStrat = getFinalStrategy(game);
+		if(predictedStrat == game.strategy) {
+			numberOfCorrectDecisions++;
+		}
 		totalDecisions++;
-		switch (getFinalStrategy(game)) {
+		switch (predictedStrat) {
 
 		case EATPILLS:
 			int[] pills = game.getPillIndices();
@@ -335,11 +356,6 @@ public class DecisionTree extends Controller<MOVE> {
 					game.getClosestNodeIndexFromNodeIndex(game.getPacmanCurrentNodeIndex(), targetsArray,
 							Constants.DM.PATH),
 					Constants.DM.PATH);
-			if (pacManResult == nextMove)
-				numberOfCorrectDecisions++;
-			else
-				 System.err.println("Incorrect prediction: " + nextMove.toString() +  ", pacman chose: "
-				 + pacManResult.toString());
 				return nextMove;
 		case CHASE:
 			int minDistGChase = Integer.MAX_VALUE;
@@ -357,8 +373,6 @@ public class DecisionTree extends Controller<MOVE> {
 
 			nextMove = game.getNextMoveTowardsTarget(game.getPacmanCurrentNodeIndex(),
 					game.getGhostCurrentNodeIndex(ghostToChase), Constants.DM.PATH);
-			if (pacManResult == nextMove)
-				numberOfCorrectDecisions++;
 			return nextMove;
 		case FLEE:
 			int minDistGRunAway = Integer.MAX_VALUE;
@@ -375,8 +389,6 @@ public class DecisionTree extends Controller<MOVE> {
 
 			nextMove = game.getNextMoveAwayFromTarget(game.getPacmanCurrentNodeIndex(),
 					game.getGhostCurrentNodeIndex(ghostToFleeFrom), Constants.DM.PATH);
-			if (pacManResult == nextMove)
-				numberOfCorrectDecisions++;
 			return nextMove;
 		default:
 			return MOVE.NEUTRAL;

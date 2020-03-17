@@ -62,14 +62,15 @@ public class Executor {
 //		 DataSplitter.splitData(); // use to split data into training set & testing set
 		
 		DecisionTree tree = new DecisionTree();
-		tree.buildTree();
 		exec.runGameTimed(tree, new StarterGhosts(), visual);
 //		
 //		// prints some information about the accuracy
+		System.out.println("ACCURACY FOR TRAINING SET");
 		System.out.println("number of correct predictions: " + tree.numberOfCorrectDecisions);
 		System.out.println("Total predictions: " + tree.totalDecisions);
-		System.out.println("Accuracy: " + ((tree.numberOfCorrectDecisions * 100) / DataSaverLoader.getNrOfTuples()));
-		
+		double accuracy= (double) Math.ceil((double)tree.numberOfCorrectDecisions / (double) tree.totalDecisions *100);
+		System.out.println("Accuracy: " + accuracy + "%");
+
 		// #####################################################
 		
 		
