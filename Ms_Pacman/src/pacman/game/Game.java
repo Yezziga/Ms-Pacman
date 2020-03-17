@@ -70,7 +70,7 @@ public final class Game
 	
 	private Random rnd;
 	private long seed;
-	public STRATEGY strategy;	
+	public STRATEGY strategy = STRATEGY.EATPILLS;	
 	
 	/////////////////////////////////////////////////////////////////////////////
 	///////////////////  Constructors and initialisers  /////////////////////////
