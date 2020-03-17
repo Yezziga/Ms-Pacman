@@ -85,13 +85,16 @@ public class Dataset {
 		return dataset;
 	}
 	
+	public DataTuple get(int index) {
+		return dataset[index];
+	}
+	
+	/**
+	 * Name of attribute : attributeVale : number of occurrences
+	 * @return
+	 */
 	public HashMap<String, HashMap<String, Integer> > getMap(){
 		return attributes;
 	}
 
-	// TODO: text to print out nr of occurrence for each attribute value
-	public String attributesToString() {
-		String str = "";
-		return str;
-	}
 }

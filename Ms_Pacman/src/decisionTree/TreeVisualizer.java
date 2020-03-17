@@ -27,7 +27,7 @@ private static final long serialVersionUID = -2707712944901661771L;
 		super("Decision tree");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(600, 400);
+		setSize(1000, 1000);
 
 		graph = new mxGraph();
 				
@@ -35,7 +35,7 @@ private static final long serialVersionUID = -2707712944901661771L;
 
 		graph.getModel().beginUpdate();
 		try {
-			Object root = graph.insertVertex(parent, null, node.getLabel(), 300, 20, 80, 30);
+			Object root = graph.insertVertex(parent, null, node.getLabel(), 400, 20, 80, 30);
 
 			x = 20;
 
@@ -51,22 +51,22 @@ private static final long serialVersionUID = -2707712944901661771L;
 		setVisible(true);
 	}
 
-	private void addChildren(Node node, Object parent, int level) {
+	private void addChildren(Node node, Object parent, int y) {
 		for (Map.Entry<String, Node> entry : node.getChildren().entrySet()) {
 			String key = entry.getKey();
 			Node childNode = entry.getValue();
 
-			Object child = addChild(parent, childNode.getLabel(), key, x, level);
+			Object child = addChild(parent, childNode.getLabel(), key, x, y);
 
-			x += 100;
+			x += 20;
 			
-			addChildren(childNode, child, level+1);
+			addChildren(childNode, child, y+1);
 			
 		}
 	}
 	
-	private Object addChild(Object parent, String label, String edge, int x, int level) {
-		Object child = graph.insertVertex(this.parent, null, label, x, 110*level, 80, 30);
+	private Object addChild(Object parent, String label, String edge, int x, int y) {
+		Object child = graph.insertVertex(this.parent, null, label, x, 100*y, 80, 30);
 		graph.insertEdge(this.parent, null, edge, parent, child);
 		return child;
 	}

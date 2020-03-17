@@ -140,10 +140,6 @@ public class DataTuple {
 		this.inkyDist = Integer.parseInt(dataSplit[8]);
 		this.pinkyDist = Integer.parseInt(dataSplit[9]);
 		this.sueDist = Integer.parseInt(dataSplit[10]);
-		this.blinkyDir = MOVE.valueOf(dataSplit[11]);
-		this.inkyDir = MOVE.valueOf(dataSplit[12]);
-		this.pinkyDir = MOVE.valueOf(dataSplit[13]);
-		this.sueDir = MOVE.valueOf(dataSplit[14]);
 
 	}
 
@@ -162,10 +158,6 @@ public class DataTuple {
 		stringbuilder.append(this.inkyDist + ";");
 		stringbuilder.append(this.pinkyDist + ";");
 		stringbuilder.append(this.sueDist + ";");
-		stringbuilder.append(this.blinkyDir + ";");
-		stringbuilder.append(this.inkyDir + ";");
-		stringbuilder.append(this.pinkyDir + ";");
-		stringbuilder.append(this.sueDir + ";");
 		return stringbuilder.toString();
 	}
 
@@ -299,14 +291,6 @@ public class DataTuple {
 			return discretizeDistance(pinkyDist).toString();
 		case "sueDist":
 			return discretizeDistance(sueDist).toString();
-		case "blinkyDir":
-			return discretizeDistance(blinkyDist).toString();
-		case "inkyDir":
-			return discretizeDistance(inkyDist).toString();
-		case "pinkyDir":
-			return discretizeDistance(pinkyDist).toString();
-		case "sueDir":
-			return discretizeDistance(sueDist).toString();
 		default:
 			return "None";
 		}
@@ -324,7 +308,7 @@ public class DataTuple {
 			hash = new HashMap<>();
 			// TODO: make sure attribute names are correct
 			String[] attrs = { "strategy", "numOfPillsLeft", "numOfPowerPillsLeft", "isBlinkyEdible", "isInkyEdible",
-					"isPinkyEdible", "isSueEdible", "blinkyDist", "inkyDist", "pinkyDist", "sueDist", "blinkyDir", "inkyDir", "pinkyDir", "sueDir" };
+					"isPinkyEdible", "isSueEdible", "blinkyDist", "inkyDist", "pinkyDist", "sueDist" };
 			for (String attr : attrs) {
 				this.hash.put(attr, discretize(attr));
 			}
